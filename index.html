@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+
+	<div id="todoapp" class="d-flex justify-content-center">
+
+		<div style="width: 35vw;">
+			<div class="d-flex">
+				<input v-model="userinput" placeholder="enter task" class="form-control" type="text" name="">
+				<input @click="addTodo()" id="submitbutton" value="add" type="submit" class="btn btn-success">
+
+			</div>
+			
+			<br>
+
+			<div v-for="(todo, index) in todos" :key="index" class="d-flex justify-content-between align-items-center">
+				<p>[[todo]]</p>
+				<div>
+
+					<a href="#" @click="editTodoView([[index]])" class="btn btn-warning">edit</a>
+					<a href="#" @click="deleteTodo([[index]])" class="btn btn-danger">delete</a>
+				</div>
+				
+				
+			</div>
+			<br><br>
+			<div v-if="seen" class="d-flex">
+				<input v-model="editinput" placeholder="edit task" class="form-control" type="text" name="">
+				<input value="edit" @click="edittodo()" type="submit" class="btn btn-warning">
+				<input @click="toggleseen()" value="cancel" type="submit" class="btn btn-light">
+			</div>
+
+		</div>
+
+		
+	</div>
+
+	<button-counter></button-counter>
+	
+</body>
+</html>
+
+<script>
+
+	new Vue({
+		el : "#todoapp",
+		delimiters : ['[[',']]'],
+		data : {
+			todos : ['task 1','task 2'],
+			userinput : "",
+			editinput : "",
+			seen : false,
+			selectedindex : 0
+		},
+		methods: {
+			toggleseen(){
+				if(this.seen =false){
+					this.seen =true;
+				}
+				else{
+					this.seen = false;
+				}
+
+			},
+			addTodo(){
+				this.todos.push(this.userinput);
+				this.userinput = "";
+			},
+			deleteTodo(index){
+				this.todos.splice(index,1);
+
+			},
+			edittodo(){
+				this.todos[this.selectedindex] = this.editinput;
+				this.$forceUpdate();
+				this.toggleseen();
+
+			},
+			
+			editTodoView(index){
+				this.seen = true;
+				this.editinput = this.todos[index];
+				this.selectedindex = index;
+			},
+			
+		},
+		
+	})
+
+
+</script>
+
+
+<style>
+	#todoapp{
+		padding-top: 60px;
+		width: 100vw;
+	}
+
+	input {
+		text-align: center;
+	}
+
+	p{
+		margin: 0px;
+		font-size: 30px;
+		text-align: center;
+	}
+</style>
